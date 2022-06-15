@@ -5,7 +5,7 @@ const dataArr = [];
 const city = document.querySelector(".entry");
 const search = document.getElementById("btn");
 const content = document.querySelector(".content");
-search.addEventListener("click", (e) => {
+city.addEventListener("change", (e) => {
   fetch(
     `http://api.openweathermap.org/geo/1.0/direct?q=${city.value}&limit=5&appid=b473abf08211233160d13b09b0646297`
   )
@@ -56,7 +56,7 @@ search.addEventListener("click", (e) => {
       //   document.querySelector(".container").append(table);
       console.log(data);
 
-      const { local_names, lat, lon } = data[0];
+      const { country, local_names, lat, lon } = data[0];
 
       fetch(
         `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=b473abf08211233160d13b09b0646297`
@@ -64,22 +64,30 @@ search.addEventListener("click", (e) => {
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
+          renderCard(data);
           data.localName = local_names.tr;
+          data.country = country;
           dataArr.push(data);
           content.innerHTML = "";
           dataArr.forEach((data) => {
             const card = document.createElement("div");
-            card.className = "card shadow";
-            card.style.width = "18rem";
+            card.className =
+              "card shadow d-flex flex-column align-items-center me-3 mb-3";
+            card.style.width = "14rem";
             card.innerHTML = `
           <div class="card-body">
             <p class="card-text lead">${
               data.localName ? data.localName : data.name
-            }</p>
+            }  <sup><span class="badge bg-warning rounded-pill">${
+              data.country
+            }</span></sup></p>
             <p class="card-text display-3"><strong class="fw-bold">${Math.trunc(
               data.main.temp
             )}</strong><small><sup>°C</sup></small></p>
-            <p class="card-text text-uppercase">${
+            <img src="http://openweathermap.org/img/wn/${
+              data.weather[0].icon
+            }@2x.png" class="card-img-top img-fluid"  alt="...">
+            <p class="card-text text-uppercase lead">${
               data.weather[0].description
             }</p>
           </div>`;
@@ -90,30 +98,5 @@ search.addEventListener("click", (e) => {
     })
     .catch((err) => console.log(err.message));
 });
-// const lat = 39.9207886;
-// const lon = 32.8540482;
 
-// fetch(
-//   "https://api.openweathermap.org/data/2.5/weather?lat=39.9207886&lon=32.8540482&units=metric&appid=b473abf08211233160d13b09b0646297"
-// )
-//   .then((res) => res.json())
-//   .then((data) => {
-//     // console.log(data);
-//     // console.log(data.main.temp);
-//     // console.log(data.weather[0].description);
-//     // console.log(data.weather[0].icon);
-//     // console.log(data.weather);
-
-//     const card = document.createElement("div");
-
-//     card.className = "card";
-//     card.style.width = "18rem";
-//     card.innerHTML = `
-// <div class="card-body">
-//   <p class="card-text">${data.name}</p>
-//   <p class="card-text">${data.main.temp}</p>
-//   <p class="card-text">${data.weather[0].description}</p>
-// </div>`;
-
-//     document.querySelector(".content").append(card);
-//   });
+const renderCard = () => {};
