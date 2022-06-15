@@ -1,40 +1,58 @@
-"use strict";
-
 const key = "b473abf08211233160d13b09b0646297";
 const dataArr = [];
 const city = document.querySelector(".entry");
 const search = document.getElementById("btn");
 const content = document.querySelector(".content");
-city.addEventListener("change", (e) => {
-  fetch(
-    `http://api.openweathermap.org/geo/1.0/direct?q=${city.value}&limit=5&appid=b473abf08211233160d13b09b0646297`
-  )
-    .then((res) => {
-      if (!res.ok) throw new Error("Something Went Wrong");
-      return res.json();
-    })
-    .then((data) => {
-      // renderResult(data);
-      console.log(data);
 
-      const { country, local_names, lat, lon } = data[0];
+city.onchange = (e) => {
+  getWeather();
+};
+search.onclick = (e) => {
+  getWeather();
+};
 
-      fetch(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=b473abf08211233160d13b09b0646297`
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-          renderCard(data, country, local_names);
-        });
-    })
-    .catch((err) => console.log(err.message));
-});
+const getWeather = async () => {
+  try {
+    const res = await fetch(
+      `http://api.openweathermap.org/geo/1.0/direct?q=${city.value}&limit=5&appid=b473abf08211233160d13b09b0646297`
+    );
+    if (!res.ok) throw new Error("Something Went Wrong");
+    const data = await res.json();
+    const {
+      country,
+      local_names: { tr },
+      lat,
+      lon,
+    } = data[0];
 
-const renderCard = (data, country, local_names) => {
-  data.localName = local_names.tr;
-  data.country = country;
-  dataArr.push(data);
+    const weatherRes = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=b473abf08211233160d13b09b0646297`
+    );
+    if (!res.ok) throw new Error("Something Went Wrong");
+    const weatherData = await weatherRes.json();
+    const {
+      main: { temp },
+      weather,
+    } = weatherData;
+
+    renderCard(country, tr, temp, weather);
+  } catch (err) {
+    err.name === "TypeError" ? alert("Invalid Entry") : console.log(err);
+  }
+};
+const renderCard = (country, local_names, temp, weather) => {
+  const city = {
+    country: country,
+    locale: local_names,
+    temp: temp,
+    weatherData: weather,
+  };
+  if (dataArr.every((temp) => temp.locale !== city.locale)) {
+    dataArr.push(city);
+  } else {
+    // dataArr.length ? alert("You've already have this city.") : null;
+  }
+
   content.innerHTML = "";
   dataArr.forEach((data) => {
     const card = document.createElement("div");
@@ -44,20 +62,22 @@ const renderCard = (data, country, local_names) => {
     card.innerHTML = `
   <div class="card-body">
     <p class="card-text lead">${
-      data.localName ? data.localName : data.name
+      data.locale
     }  <sup><span class="badge bg-warning rounded-pill">${
       data.country
     }</span></sup></p>
     <p class="card-text display-3"><strong class="fw-bold">${Math.trunc(
-      data.main.temp
+      data.temp
     )}</strong><small><sup>°C</sup></small></p>
     <img src="http://openweathermap.org/img/wn/${
-      data.weather[0].icon
+      data.weatherData[0].icon
     }@2x.png" class="card-img-top img-fluid"  alt="...">
-    <p class="card-text text-uppercase lead">${data.weather[0].description}</p>
+    <p class="card-text text-uppercase lead">${
+      data.weatherData[0].description
+    }</p>
   </div>`;
 
-    document.querySelector(".content").append(card);
+    content.append(card);
   });
 };
 
