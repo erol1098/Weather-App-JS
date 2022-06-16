@@ -6,13 +6,14 @@ const form = document.querySelector("form");
 const turkish = document.querySelector(".turkish");
 const english = document.querySelector(".english");
 const dataArr = [];
-let language = "en";
-let localLanguage = "en";
-let unit = "imperial";
+let language = "tr";
+let localLanguage = "tr";
+let unit = "metric";
 turkish.onclick = () => {
   language = "tr";
   localLanguage = "tr";
   unit = "metric";
+  document.querySelector(".language-label").textContent = "Türkçe";
   content.innerHTML = "";
   dataArr.splice(0, dataArr.length);
 };
@@ -20,6 +21,7 @@ english.onclick = () => {
   language = "en";
   localLanguage = "en";
   unit = "imperial";
+  document.querySelector(".language-label").textContent = "English";
   content.innerHTML = "";
   dataArr.splice(0, dataArr.length);
 };
@@ -48,10 +50,15 @@ const getWeather = async () => {
     if (!res.ok) throw new Error("Something Went Wrong");
     const data = await res.json();
     const { country, name, local_names, lat, lon } = data[0];
-    const localeName = Object.entries(local_names).filter(
-      (lang) => lang[0] === localLanguage
-    )[0][1];
 
+    const localeName =
+      Object.entries(local_names).filter(
+        (lang) => lang[0] === localLanguage
+      )[0] === []
+        ? Object.entries(local_names).filter(
+            (lang) => lang[0] === localLanguage
+          )[0][1]
+        : name;
     const weatherData = await axios.get(
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=${unit}&appid=${key}&lang=${language}`
     );
