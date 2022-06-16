@@ -45,7 +45,12 @@ const getWeather = async () => {
 
     renderCard(country, name, tr, temp, weather);
   } catch (err) {
-    err.name === "TypeError" ? alert("Invalid Entry") : console.log(err);
+    const toastLiveExample = document.getElementById("liveToast");
+    const toast = new bootstrap.Toast(toastLiveExample);
+    if (err.name === "TypeError" || city.value.trim() === "") {
+      document.querySelector(".toast-body").textContent = "Invalid Entry!";
+      toast.show();
+    } else console.warn(err);
     city.value = "";
     city.focus();
   }
@@ -65,7 +70,13 @@ const renderCard = (country, name, local_names, temp, weather) => {
   ) {
     dataArr.push(city);
   } else {
-    dataArr.length ? alert("You've already have this city.") : null;
+    if (dataArr.length) {
+      const toastLiveExample = document.getElementById("liveToast");
+      const toast = new bootstrap.Toast(toastLiveExample);
+      document.querySelector(".toast-body").textContent =
+        "You've already have this city.";
+      toast.show();
+    }
   }
 
   content.innerHTML = "";
@@ -137,3 +148,17 @@ const renderResult = (data) => {
 
   document.querySelector(".container").append(table);
 };
+
+// const alertPlaceholder = document.getElementById("liveAlertPlaceholder");
+
+// const alert = (message, type) => {
+//   const wrapper = document.createElement("div");
+//   wrapper.innerHTML = [
+//     `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+//     `   <div>${message}</div>`,
+//     '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+//     "</div>",
+//   ].join("");
+
+//   alertPlaceholder.append(wrapper);
+// };

@@ -8,22 +8,35 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous" />
   <link rel="stylesheet" href="./css/style.css">
-  <link rel="shortcut icon" href="./weather-forecast.png" type="image/x-icon">
+  <link rel="shortcut icon" href="./img/weather-forecast.png" type="image/x-icon">
   <script defer src="./weather.js"></script>
 </head>
 
-<body class="bg-light">
+<body>
   <div class="container">
     <header class="row mb-5">
       <h1 class="title text-center my-5">Weather App</h1>
       <div class="input-group mb-3">
         <input type="text" class="col-8 form-control entry shadow rounded-pill " placeholder="Search For A City..." />
-        <button class="col-4 btn btn-secondary py-3 border border-0 shadow rounded-pill" type="button" id="btn">
+        <button class="col-4 btn btn-success py-3 border border-0 shadow rounded-pill" type="button" id="btn">
           Search
         </button>
       </div>
+      <div id="liveAlertPlaceholder" class=""></div>
+      <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header">
+            <img src="./img/weather-forecast.png" class="rounded me-2" alt="...">
+            <strong class="me-auto">Weather App</strong>
+
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">
+          </div>
+        </div>
+      </div>
     </header>
-    <main class="content row justify-content-start"></main>
+    <main class="content row justify-content-start px-3"></main>
     <button class="clear btn btn-warning rounded-pill text-white">Clear
       Dashboard</button>
   </div>
