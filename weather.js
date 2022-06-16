@@ -6,9 +6,11 @@ const content = document.querySelector(".content");
 
 city.onchange = (e) => {
   getWeather();
+  city.value = "";
 };
 search.onclick = (e) => {
   getWeather();
+  city.value = "";
 };
 
 const getWeather = async () => {
@@ -38,6 +40,8 @@ const getWeather = async () => {
     renderCard(country, tr, temp, weather);
   } catch (err) {
     err.name === "TypeError" ? alert("Invalid Entry") : console.log(err);
+    city.value = "";
+    city.focus();
   }
 };
 const renderCard = (country, local_names, temp, weather) => {
@@ -50,7 +54,7 @@ const renderCard = (country, local_names, temp, weather) => {
   if (dataArr.every((temp) => temp.locale !== city.locale)) {
     dataArr.push(city);
   } else {
-    // dataArr.length ? alert("You've already have this city.") : null;
+    dataArr.length ? alert("You've already have this city.") : null;
   }
 
   content.innerHTML = "";
@@ -61,7 +65,7 @@ const renderCard = (country, local_names, temp, weather) => {
     card.style.width = "14rem";
     card.innerHTML = `
   <div class="card-body">
-    <p class="card-text lead">${
+    <p class="card-text lead city-name">${
       data.locale
     }  <sup><span class="badge bg-warning rounded-pill">${
       data.country
@@ -71,8 +75,8 @@ const renderCard = (country, local_names, temp, weather) => {
     )}</strong><small><sup>°C</sup></small></p>
     <img src="http://openweathermap.org/img/wn/${
       data.weatherData[0].icon
-    }@2x.png" class="card-img-top img-fluid"  alt="...">
-    <p class="card-text text-uppercase lead">${
+    }@2x.png" class="card-img-top img-fluid d-block mx-auto"  alt="...">
+    <p class="card-text text-uppercase lead text-center">${
       data.weatherData[0].description
     }</p>
   </div>`;
