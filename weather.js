@@ -50,15 +50,19 @@ const getWeather = async () => {
     if (!res.ok) throw new Error("Something Went Wrong");
     const data = await res.json();
     const { country, name, local_names, lat, lon } = data[0];
+    let localeName;
+    console.log(local_names);
 
-    const localeName =
-      Object.entries(local_names).filter(
-        (lang) => lang[0] === localLanguage
-      )[0] === []
-        ? Object.entries(local_names).filter(
-            (lang) => lang[0] === localLanguage
-          )[0][1]
-        : name;
+    Object.entries(local_names).some((entry) => entry[0] === localLanguage)
+      ? Object.entries(local_names).forEach((entry) => {
+          if (entry[0] === localLanguage) {
+            console.log(entry);
+            localeName = entry[1];
+            console.log(localeName);
+          }
+        })
+      : (localeName = name);
+
     const weatherData = await axios.get(
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=${unit}&appid=${key}&lang=${language}`
     );
@@ -112,7 +116,7 @@ const renderCard = (country, name, localeName, temp, weather) => {
     card.innerHTML = `
   <div class="card-body">
     <p class="card-text lead city-name">${
-      data.locale ? data.locale : data.name
+      data.locale
     }  <sup><span class="badge bg-warning rounded-pill">${
       data.country
     }</span></sup></p>
