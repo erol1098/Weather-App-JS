@@ -9,13 +9,15 @@
 }
 body {
   background-attachment: fixed;
-  background-image: url("../img/background.jpg");
+  background-image: url("../img/few.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
-.title {
-  color: var(--orange);
+/* .title {
+  color: #fff;
+} */
+.language {
 }
 .entry {
   text-indent: 2rem;

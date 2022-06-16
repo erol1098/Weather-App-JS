@@ -1,28 +1,31 @@
-const key = "b473abf08211233160d13b09b0646297";
-const dataArr = [];
-const city = document.querySelector(".entry");
-const search = document.getElementById("btn");
+const input = document.querySelector(".entry");
+const searchBtn = document.getElementById("btn");
 const content = document.querySelector(".content");
 const clear = document.querySelector(".clear");
-city.onchange = (e) => {
-  getWeather();
-  city.value = "";
-};
-search.onclick = (e) => {
-  getWeather();
-  city.value = "";
-};
+const form = document.querySelector("form");
+const dataArr = [];
+const language = "tr";
+localStorage.setItem(
+  "apiKey",
+  EncryptStringAES("b473abf08211233160d13b09b0646297")
+);
 
+form.onsubmit = (e) => {
+  e.preventDefault();
+  getWeather();
+  form.reset();
+};
 clear.onclick = (e) => {
   content.innerHTML = "";
   dataArr.splice(0, dataArr.length);
   console.log(dataArr);
 };
-
 const getWeather = async () => {
   try {
+    const key = DecryptStringAES(localStorage.getItem("apiKey"));
+
     const res = await fetch(
-      `https://api.openweathermap.org/geo/1.0/direct?q=${city.value}&limit=5&appid=b473abf08211233160d13b09b0646297`
+      `https://api.openweathermap.org/geo/1.0/direct?q=${input.value}&limit=5&appid=${key}`
     );
     if (!res.ok) throw new Error("Something Went Wrong");
     const data = await res.json();
@@ -33,26 +36,25 @@ const getWeather = async () => {
       lat,
       lon,
     } = data[0];
-    const weatherRes = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=b473abf08211233160d13b09b0646297`
+
+    const weatherData = await axios.get(
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${key}&lang=${language}`
     );
-    if (!res.ok) throw new Error("Something Went Wrong");
-    const weatherData = await weatherRes.json();
     const {
       main: { temp },
       weather,
-    } = weatherData;
+    } = weatherData.data;
 
     renderCard(country, name, tr, temp, weather);
   } catch (err) {
     const toastLiveExample = document.getElementById("liveToast");
     const toast = new bootstrap.Toast(toastLiveExample);
-    if (err.name === "TypeError" || city.value.trim() === "") {
+    if (err.name === "TypeError" || input.value.trim() === "") {
       document.querySelector(".toast-body").textContent = "Invalid Entry!";
       toast.show();
     } else console.warn(err);
-    city.value = "";
-    city.focus();
+    input.value = "";
+    input.focus();
   }
 };
 const renderCard = (country, name, local_names, temp, weather) => {
@@ -103,7 +105,7 @@ const renderCard = (country, name, local_names, temp, weather) => {
     }</p>
   </div>`;
 
-    content.append(card);
+    content.prepend(card);
   });
 };
 
