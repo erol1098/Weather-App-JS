@@ -13,14 +13,20 @@
   /* font-size: 1.2rem; */
 }
 .title {
-  color: #0c6396;
+  color: var(--orange);
 }
 .entry {
   text-indent: 2rem;
   font-size: 1.2rem;
 }
+.entry:focus {
+  outline: none;
+}
 #btn {
   font-size: 1.2rem;
+}
+.card {
+  border: 0.1rem solid var(--bg_main);
 }
 .city-name {
   font-size: 1.6rem;

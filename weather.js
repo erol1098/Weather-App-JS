@@ -22,11 +22,11 @@ const getWeather = async () => {
     const data = await res.json();
     const {
       country,
+      name,
       local_names: { tr },
       lat,
       lon,
     } = data[0];
-
     const weatherRes = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=b473abf08211233160d13b09b0646297`
     );
@@ -37,21 +37,26 @@ const getWeather = async () => {
       weather,
     } = weatherData;
 
-    renderCard(country, tr, temp, weather);
+    renderCard(country, name, tr, temp, weather);
   } catch (err) {
     err.name === "TypeError" ? alert("Invalid Entry") : console.log(err);
     city.value = "";
     city.focus();
   }
 };
-const renderCard = (country, local_names, temp, weather) => {
+const renderCard = (country, name, local_names, temp, weather) => {
   const city = {
     country: country,
+    name: name,
     locale: local_names,
     temp: temp,
     weatherData: weather,
   };
-  if (dataArr.every((temp) => temp.locale !== city.locale)) {
+  if (
+    dataArr.every(
+      (temp) => temp.locale !== city.locale || temp.name !== city.name
+    )
+  ) {
     dataArr.push(city);
   } else {
     dataArr.length ? alert("You've already have this city.") : null;
@@ -66,7 +71,7 @@ const renderCard = (country, local_names, temp, weather) => {
     card.innerHTML = `
   <div class="card-body">
     <p class="card-text lead city-name">${
-      data.locale
+      data.locale ? data.locale : data.name
     }  <sup><span class="badge bg-warning rounded-pill">${
       data.country
     }</span></sup></p>
