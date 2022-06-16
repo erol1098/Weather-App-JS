@@ -1,29 +1,20 @@
 const input = document.querySelector(".entry");
 const searchBtn = document.getElementById("btn");
 const content = document.querySelector(".content");
-const clear = document.querySelector(".clear");
+const clearBtn = document.querySelector(".clear");
 const form = document.querySelector("form");
 const turkish = document.querySelector(".turkish");
 const english = document.querySelector(".english");
 const dataArr = [];
-let language = "tr";
-let localLanguage = "tr";
-let unit = "metric";
+let language = "en";
+let localLanguage = "en";
+let unit = "imperial";
+
 turkish.onclick = () => {
-  language = "tr";
-  localLanguage = "tr";
-  unit = "metric";
-  document.querySelector(".language-label").textContent = "Türkçe";
-  content.innerHTML = "";
-  dataArr.splice(0, dataArr.length);
+  convertLanguage("tr");
 };
 english.onclick = () => {
-  language = "en";
-  localLanguage = "en";
-  unit = "imperial";
-  document.querySelector(".language-label").textContent = "English";
-  content.innerHTML = "";
-  dataArr.splice(0, dataArr.length);
+  convertLanguage("en");
 };
 
 localStorage.setItem(
@@ -36,7 +27,7 @@ form.onsubmit = (e) => {
   getWeather();
   form.reset();
 };
-clear.onclick = (e) => {
+clearBtn.onclick = (e) => {
   content.innerHTML = "";
   dataArr.splice(0, dataArr.length);
 };
@@ -136,6 +127,32 @@ const renderCard = (country, name, localeName, temp, weather) => {
   });
 };
 
+const convertLanguage = (language) => {
+  if (language === "tr") {
+    document.querySelector(".title").textContent = "Hava Durumu Tahmini";
+    document.querySelector(".language-label").textContent = "Türkçe";
+    input.setAttribute("placeholder", "Bir Şehir Adı Girin...");
+    searchBtn.textContent = "Ara";
+    clearBtn.textContent = "Ekranı Temizle";
+    language = "tr";
+    localLanguage = "tr";
+    unit = "metric";
+    content.innerHTML = "";
+    dataArr.splice(0, dataArr.length);
+  } else {
+    document.querySelector(".title").textContent = "Weather Forecast";
+    document.querySelector(".language-label").textContent = "English";
+    input.setAttribute("placeholder", "Search For A City...");
+    searchBtn.textContent = "Search";
+    clearBtn.textContent = "Clear Dashboard";
+    language = "en";
+    localLanguage = "en";
+    unit = "imperial";
+    content.innerHTML = "";
+    dataArr.splice(0, dataArr.length);
+  }
+};
+
 const renderResult = (data) => {
   const cities = data.map((city) => {
     const { name, lat, lon, country, state } = city;
@@ -177,17 +194,3 @@ const renderResult = (data) => {
 
   document.querySelector(".container").append(table);
 };
-
-// const alertPlaceholder = document.getElementById("liveAlertPlaceholder");
-
-// const alert = (message, type) => {
-//   const wrapper = document.createElement("div");
-//   wrapper.innerHTML = [
-//     `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-//     `   <div>${message}</div>`,
-//     '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-//     "</div>",
-//   ].join("");
-
-//   alertPlaceholder.append(wrapper);
-// };
