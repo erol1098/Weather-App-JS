@@ -17,7 +17,17 @@ body {
 /* .title {
   color: #fff;
 } */
-.language {
+.turkish,
+.english {
+  cursor: pointer;
+}
+.turkish:hover,
+.english:hover {
+  transform: scale(1.1);
+}
+.turkish:active,
+.english:active {
+  opacity: 0.8;
 }
 .entry {
   text-indent: 2rem;

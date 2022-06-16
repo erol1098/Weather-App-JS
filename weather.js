@@ -3,8 +3,24 @@ const searchBtn = document.getElementById("btn");
 const content = document.querySelector(".content");
 const clear = document.querySelector(".clear");
 const form = document.querySelector("form");
+const turkish = document.querySelector(".turkish");
+const english = document.querySelector(".english");
 const dataArr = [];
-const language = "tr";
+let language = "en";
+let localLanguage = "en";
+turkish.onclick = () => {
+  language = "tr";
+  localLanguage = "tr";
+  content.innerHTML = "";
+  dataArr.splice(0, dataArr.length);
+};
+english.onclick = () => {
+  language = "en";
+  localLanguage = "en";
+  content.innerHTML = "";
+  dataArr.splice(0, dataArr.length);
+};
+
 localStorage.setItem(
   "apiKey",
   EncryptStringAES("b473abf08211233160d13b09b0646297")
@@ -18,7 +34,6 @@ form.onsubmit = (e) => {
 clear.onclick = (e) => {
   content.innerHTML = "";
   dataArr.splice(0, dataArr.length);
-  console.log(dataArr);
 };
 const getWeather = async () => {
   try {
@@ -29,13 +44,10 @@ const getWeather = async () => {
     );
     if (!res.ok) throw new Error("Something Went Wrong");
     const data = await res.json();
-    const {
-      country,
-      name,
-      local_names: { tr },
-      lat,
-      lon,
-    } = data[0];
+    const { country, name, local_names, lat, lon } = data[0];
+    const localeName = Object.entries(local_names).filter(
+      (lang) => lang[0] === localLanguage
+    )[0][1];
 
     const weatherData = await axios.get(
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${key}&lang=${language}`
@@ -45,7 +57,7 @@ const getWeather = async () => {
       weather,
     } = weatherData.data;
 
-    renderCard(country, name, tr, temp, weather);
+    renderCard(country, name, localeName, temp, weather);
   } catch (err) {
     const toastLiveExample = document.getElementById("liveToast");
     const toast = new bootstrap.Toast(toastLiveExample);
@@ -57,11 +69,11 @@ const getWeather = async () => {
     input.focus();
   }
 };
-const renderCard = (country, name, local_names, temp, weather) => {
+const renderCard = (country, name, localeName, temp, weather) => {
   const city = {
     country: country,
     name: name,
-    locale: local_names,
+    locale: localeName,
     temp: temp,
     weatherData: weather,
   };
@@ -94,17 +106,18 @@ const renderCard = (country, name, local_names, temp, weather) => {
     }  <sup><span class="badge bg-warning rounded-pill">${
       data.country
     }</span></sup></p>
-    <p class="card-text display-3"><strong class="fw-bold">${Math.trunc(
+    <p class="card-text display-3"><strong class="fw-bold">${Math.round(
       data.temp
     )}</strong><small><sup>°C</sup></small></p>
+    <figure>
     <img src="http://openweathermap.org/img/wn/${
       data.weatherData[0].icon
-    }@2x.png" class="card-img-top img-fluid d-block mx-auto"  alt="...">
-    <p class="card-text text-uppercase lead text-center">${
+    }@2x.png" class="card-img-top img-fluid d-block mx-auto"  alt="weather icon">
+    <figcaption class="card-text text-uppercase lead text-center">${
       data.weatherData[0].description
-    }</p>
+    }</figcaption>
+    </figure>
   </div>`;
-
     content.prepend(card);
   });
 };
