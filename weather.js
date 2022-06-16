@@ -3,7 +3,7 @@ const dataArr = [];
 const city = document.querySelector(".entry");
 const search = document.getElementById("btn");
 const content = document.querySelector(".content");
-
+const clear = document.querySelector(".clear");
 city.onchange = (e) => {
   getWeather();
   city.value = "";
@@ -11,6 +11,12 @@ city.onchange = (e) => {
 search.onclick = (e) => {
   getWeather();
   city.value = "";
+};
+
+clear.onclick = (e) => {
+  content.innerHTML = "";
+  dataArr.splice(0, dataArr.length);
+  console.log(dataArr);
 };
 
 const getWeather = async () => {

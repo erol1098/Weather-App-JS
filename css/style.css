@@ -34,3 +34,8 @@
 small {
   font-size: 3rem;
 }
+.clear {
+  position: fixed;
+  top: 5.5rem;
+  right: 1rem;
+}
