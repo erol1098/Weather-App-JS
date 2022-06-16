@@ -42,14 +42,10 @@ const getWeather = async () => {
     const data = await res.json();
     const { country, name, local_names, lat, lon } = data[0];
     let localeName;
-    console.log(local_names);
-
     Object.entries(local_names).some((entry) => entry[0] === localLanguage)
       ? Object.entries(local_names).forEach((entry) => {
           if (entry[0] === localLanguage) {
-            console.log(entry);
             localeName = entry[1];
-            console.log(localeName);
           }
         })
       : (localeName = name);
