@@ -8,15 +8,18 @@ const english = document.querySelector(".english");
 const dataArr = [];
 let language = "en";
 let localLanguage = "en";
+let unit = "imperial";
 turkish.onclick = () => {
   language = "tr";
   localLanguage = "tr";
+  unit = "metric";
   content.innerHTML = "";
   dataArr.splice(0, dataArr.length);
 };
 english.onclick = () => {
   language = "en";
   localLanguage = "en";
+  unit = "imperial";
   content.innerHTML = "";
   dataArr.splice(0, dataArr.length);
 };
@@ -50,7 +53,7 @@ const getWeather = async () => {
     )[0][1];
 
     const weatherData = await axios.get(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${key}&lang=${language}`
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=${unit}&appid=${key}&lang=${language}`
     );
     const {
       main: { temp },
@@ -108,7 +111,7 @@ const renderCard = (country, name, localeName, temp, weather) => {
     }</span></sup></p>
     <p class="card-text display-3"><strong class="fw-bold">${Math.round(
       data.temp
-    )}</strong><small><sup>°C</sup></small></p>
+    )}</strong><small><sup>°${unit == "imperial" ? "F" : "C"}</sup></small></p>
     <figure>
     <img src="http://openweathermap.org/img/wn/${
       data.weatherData[0].icon
