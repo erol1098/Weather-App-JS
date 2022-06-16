@@ -16,7 +16,7 @@ search.onclick = (e) => {
 const getWeather = async () => {
   try {
     const res = await fetch(
-      `http://api.openweathermap.org/geo/1.0/direct?q=${city.value}&limit=5&appid=b473abf08211233160d13b09b0646297`
+      `https://api.openweathermap.org/geo/1.0/direct?q=${city.value}&limit=5&appid=b473abf08211233160d13b09b0646297`
     );
     if (!res.ok) throw new Error("Something Went Wrong");
     const data = await res.json();
