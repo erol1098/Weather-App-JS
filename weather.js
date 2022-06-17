@@ -63,7 +63,9 @@ const getWeather = async () => {
     const toastLiveExample = document.getElementById("liveToast");
     const toast = new bootstrap.Toast(toastLiveExample);
     if (err.name === "TypeError" || input.value.trim() === "") {
-      document.querySelector(".toast-body").textContent = "Invalid Entry!";
+      document.querySelector(".toast-body").textContent = `${
+        selectedLanguage === "tr" ? "Hatalı Giriş" : "Invalid Entry"
+      }`;
       toast.show();
     } else console.warn(err);
     input.value = "";
@@ -88,8 +90,12 @@ const renderCard = (country, name, localeName, temp, weather) => {
     if (dataArr.length) {
       const toastLiveExample = document.getElementById("liveToast");
       const toast = new bootstrap.Toast(toastLiveExample);
-      document.querySelector(".toast-body").textContent =
-        "You've already have this city.";
+
+      document.querySelector(".toast-body").textContent = `${
+        selectedLanguage === "tr"
+          ? "Bu şehir zaten görüntüleniyor."
+          : "You've already have this city."
+      }`;
       toast.show();
     }
   }
