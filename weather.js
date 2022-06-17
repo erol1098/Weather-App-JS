@@ -160,4 +160,4 @@ function initialize() {
   new google.maps.places.Autocomplete(input);
 }
 
-google.maps.event.addEventListener(window, "load", initialize);
+google.maps.event.addDomListener(window, "load", initialize);
