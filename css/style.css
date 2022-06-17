@@ -35,9 +35,18 @@ body {
   text-indent: 2rem;
   font-size: 1.2rem;
 }
+
+.border-enter {
+  border-radius: 1rem 1rem 0 0;
+}
+.border-none {
+  border-radius: 1rem;
+}
+
 .entry:focus {
   outline: none;
 }
+
 #btn {
   font-size: 1.2rem;
 }

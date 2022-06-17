@@ -10,6 +10,16 @@ let selectedLanguage = "en";
 let localLanguage = "en";
 let unit = "imperial";
 
+input.addEventListener("input", (e) => {
+  if (input.value === "") {
+    input.classList.add("border-none");
+    input.classList.remove("border-enter");
+  } else {
+    input.classList.add("border-enter");
+    input.classList.remove("border-none");
+  }
+});
+
 turkish.onclick = () => {
   convertLanguage("tr");
 };
@@ -159,5 +169,4 @@ function initialize() {
   var input = document.getElementById("searchTextField");
   new google.maps.places.Autocomplete(input);
 }
-
 google.maps.event.addDomListener(window, "load", initialize);
