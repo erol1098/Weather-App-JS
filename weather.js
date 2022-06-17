@@ -6,7 +6,7 @@ const form = document.querySelector("form");
 const turkish = document.querySelector(".turkish");
 const english = document.querySelector(".english");
 const dataArr = [];
-let language = "en";
+let selectedLanguage = "en";
 let localLanguage = "en";
 let unit = "imperial";
 
@@ -51,7 +51,7 @@ const getWeather = async () => {
       : (localeName = name);
 
     const weatherData = await axios.get(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=${unit}&appid=${key}&lang=${language}`
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=${unit}&appid=${key}&lang=${selectedLanguage}`
     );
     const {
       main: { temp },
@@ -130,7 +130,7 @@ const convertLanguage = (language) => {
     input.setAttribute("placeholder", "Bir Şehir Adı Girin...");
     searchBtn.textContent = "Ara";
     clearBtn.textContent = "Ekranı Temizle";
-    language = "tr";
+    selectedLanguage = "tr";
     localLanguage = "tr";
     unit = "metric";
     content.innerHTML = "";
@@ -141,7 +141,7 @@ const convertLanguage = (language) => {
     input.setAttribute("placeholder", "Search For A City...");
     searchBtn.textContent = "Search";
     clearBtn.textContent = "Clear Dashboard";
-    language = "en";
+    selectedLanguage = "en";
     localLanguage = "en";
     unit = "imperial";
     content.innerHTML = "";
