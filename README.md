@@ -1,3 +1,3 @@
 # Weather-App-JS
 
-![Alt Text](./img/readme.gif)
+![Alt Text](./img/weatherapp.gif)
