@@ -1,7 +1,3 @@
-
-![Alt Text](./img/weatherapp.gif)
-<!-- Please update value in the {}  -->
-
 <h1 align="center">Weather Forecast</h1>
 
 <div align="center">
